@@ -6,8 +6,7 @@
 #define W 22
 using namespace std;
 
-class chessboard
-{
+class chessboard {
 public:
     char qp[H][W];
     int i, j, x1, y1;
@@ -15,8 +14,8 @@ public:
     void food();
     void prt(int grade, int score, int gamespeed);
 };
-chessboard::chessboard()
-{
+
+chessboard::chessboard() {
     for (i = 1; i <= H - 2; i++)
         for (j = 1; j <= W - 2; j++)
             qp[i][j] = ' ';
@@ -26,8 +25,8 @@ chessboard::chessboard()
         qp[i][0] = qp[i][W - 1] = '#';
     food();
 }
-void chessboard::food()
-{
+
+void chessboard::food() {
     srand(time(0));
     do
     {
@@ -36,12 +35,11 @@ void chessboard::food()
     } while (qp[x1][y1] != ' ');
     qp[x1][y1] = '$';
 }
-void chessboard::prt(int grade, int score, int gamespeed)
-{
+
+void chessboard::prt(int grade, int score, int gamespeed) {
     system("cls");
     cout << endl;
-    for (i = 0; i < H; i++)
-    {
+    for (i = 0; i < H; i++) {
         cout << "\t";
         for (j = 0; j < W; j++)
             cout << qp[i][j] << ' ';
@@ -52,79 +50,79 @@ void chessboard::prt(int grade, int score, int gamespeed)
         cout << endl;
     }
 }
-class snake :public chessboard
-{
+
+class hebi :public chessboard {
 public:
     int zb[2][100];
     long start;
     int head, tail, grade, score, gamespeed, length, timeover, x, y;
     char direction;
-    snake();
+    hebi();
     void move();
 };
-snake::snake()
-{
-    cout << "\n\n\t\tThe game is about to begin!" << endl;
-    for (i = 3; i >= 0; i--)
-    {
+
+hebi::hebi() {
+    cout << "\n\n\t\tThe game is about to begin!... written by Alperen Yilmaz with the Power of C++!" << endl;
+    for (i = 3; i >= 0; i--) {
         start = clock();
         while (clock() - start <= 1000);
         system("cls");
         if (i > 0)
             cout << "\n\n\t\tCountdown:" << i << endl;
     }
+
     for (i = 1; i <= 3; i++)
         qp[1][i] = '*';
     qp[1][4] = '@';
-    for (i = 0; i < 4; i++)
-    {
+
+    for (i = 0; i < 4; i++) {
         zb[0][i] = 1;
         zb[1][i] = i + 1;
     }
 }
-void snake::move()
-{
+
+void hebi::move() {
     score = 0;
     head = 3, tail = 0;
     grade = 1, length = 4;
     gamespeed = 500;
     direction = 77;
-    while (1)
-    {
+    while (1) {
         timeover = 1;
         start = clock();
         while ((timeover = (clock() - start <= gamespeed)) && !_kbhit());
-        if (timeover)
-        {
+
+        if (timeover) {
             _getch();
             direction = _getch();
         }
-        switch (direction)
-        {
+
+        switch (direction) {
         case 72: x = zb[0][head] - 1; y = zb[1][head]; break;
         case 80: x = zb[0][head] + 1; y = zb[1][head]; break;
         case 75: x = zb[0][head]; y = zb[1][head] - 1; break;
         case 77: x = zb[0][head]; y = zb[1][head] + 1; break;
         }
-        if (x == 0 || x == 21 || y == 0 || y == 21)
-        {
+
+        if (x == 0 || x == 21 || y == 0 || y == 21) {
             cout << "\tGame over!" << endl; break;
         }
-        if (qp[x][y] != ' ' && !(x == x1 && y == y1))
-        {
+
+        if (qp[x][y] != ' ' && !(x == x1 && y == y1)) {
             cout << "\tGame over!" << endl; break;
         }
-        if (x == x1 && y == y1)
-        {
+
+        if (x == x1 && y == y1) {
             length++;
             score = score + 100;
-            if (length >= 8)
-            {
+
+            if (length >= 8) {
                 length -= 8;
                 grade++;
                 if (gamespeed >= 200)
                     gamespeed = 550 - grade * 50;
             }
+
             qp[x][y] = '@';
             qp[zb[0][head]][zb[1][head]] = '*';
             head = (head + 1) % 100;
@@ -132,9 +130,7 @@ void snake::move()
             zb[1][head] = y;
             food();
             prt(grade, score, gamespeed);
-        }
-        else
-        {
+        } else {
             qp[zb[0][tail]][zb[1][tail]] = ' ';
             tail = (tail + 1) % 100;
             qp[zb[0][head]][zb[1][head]] = '*';
@@ -146,9 +142,9 @@ void snake::move()
         }
     }
 }
-int main()
-{
+
+int main() {
     chessboard cb;
-    snake s;
-    s.move();
+    hebi h;
+    h.move();
 }
